@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.qfedu.dao.TradeDao">
+
+    <select id="findAll" resultType="com.qfedu.vo.VTradeInfo" parameterType="map">
+        SELECT createTime,
+        CASE WHEN money > 0 THEN money END pay,
+        CASE WHEN money &lt; 0 THEN ABS(money) END income,
+        balance,COMMENT,consumType
+        FROM t_trade
+        <where>
+            <if test="beginTime != null">
+                DATE_FORMAT(createTime, '%Y-%m-%d') >=  DATE_FORMAT(#{beginTime}, '%Y-%m-%d')
+            </if>
+            <if test="endTime != null">
+               and DATE_FORMAT(createTime, '%Y-%m-%d') &lt;=  DATE_FORMAT(#{endTime}, '%Y-%m-%d')
+            </if>
+            <if test="uid != null">
+                and uid=#{uid}
+            </if>
+        </where>
+    </select>
+    <insert id="add" parameterType="com.qfedu.entity.Trade">
+        insert into t_trade (uid, money, createTime, comment, balance)
+        values (#{uid}, #{money}, #{createTime}, #{comment}, #{balance})
+    </insert>
+
+</mapper>

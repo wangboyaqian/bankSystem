@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title></title>
+    <link rel="stylesheet" href="layui/css/layui.css" />
+    <script type="text/javascript" src="layui/layui.js" ></script>
+    <script type="text/javascript" src="js/jquery-1.12.2.min.js" ></script>
+</head>
+<body class="layui-layout-body">
+<div class="layui-layout layui-layout-admin">
+    <div class="layui-header">
+        <div class="layui-logo">银行管理系统</div>
+
+        <ul class="layui-nav layui-layout-right">
+            <li class="layui-nav-item">
+                <a href="javascript:;">
+                    <img src="//tva1.sinaimg.cn/crop.0.0.118.118.180/5db11ff4gw1e77d3nqrv8j203b03cweg.jpg" class="layui-nav-img">
+                    <span id="bankCode">贤心</span>
+                </a>
+                <dl class="layui-nav-child">
+                    <dd><a href="">基本资料</a></dd>
+                    <dd><a href="">安全设置</a></dd>
+                </dl>
+            </li>
+            <li class="layui-nav-item"><a href="">退了</a></li>
+        </ul>
+    </div>
+
+    <div class="layui-side layui-bg-black">
+        <div class="layui-side-scroll">
+            <!-- 左侧导航区域（可配合layui已有的垂直导航） -->
+            <ul id="menu" class="layui-nav layui-nav-tree"  lay-filter="test">
+                <li class="layui-nav-item"><a href="balance.html" target="myframe">查询余额</a></li>
+                <li class="layui-nav-item"><a href="trans.html" target="myframe">转账</a></li>
+                <li class="layui-nav-item"><a href="transfer.html" target="myframe">转账记录</a></li>
+                <li class="layui-nav-item"><a href="">修改密码</a></li>
+                <li class="layui-nav-item"><a href="upload.html" target="myframe">上传头像</a></li>
+            </ul>
+        </div>
+    </div>
+
+    <div class="layui-body">
+        <iframe name="myframe" width="100%" height="100%" frameborder="0"></iframe>
+    </div>
+
+    <div class="layui-footer">
+        <!-- 底部固定区域 -->
+        © layui.com - 底部固定区域
+    </div>
+</div>
+<script>
+    //JavaScript代码区域
+    layui.use(['element','layer'], function(){
+        var element = layui.element;
+        var layer = layui.layer;
+
+        $.ajax({
+            type:"get",
+            url:"user/query.do",
+            dataType:"json",
+            success:function(data){
+                if(data.code == 1){
+                    $("#bankCode").html(data.info.bankCode);
+                    $("img").attr("src", data.info.imgPath);
+                }else{
+                    layer.msg("获取数据异常");
+                }
+            }
+        })
+        function updateHead () {
+            $.ajax({
+                type:"get",
+                url:"user/query.do",
+                dataType:"json",
+                success:function (data) {
+                    if (data.code == 1) {
+                        $("img").attr("src", data.info.imgPath)
+                    }
+                }
+            })
+        }
+
+    });
+</script>
+
+</body>
+</html>

@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<form method="post" enctype="multipart/form-data">
+
+    <input type="file" name="upfile"><br/>
+    <input type="submit" value="上传">
+</form>
+<script type="text/javascript" src="js/jquery-1.12.2.min.js"></script>
+<!--支持异步上传的函数-->
+<script type="text/javascript" src="js/jquery.form.min.js"></script>
+<!--ajax-->
+<script >
+    $("form").submit(function () {
+        //$.ajax 不能异步上传
+        //$.ajaxSubmit  才能异步上传
+        $("form").ajaxSubmit({
+            type:"post",
+            url:"upload.do",
+            data:$("form").serialize(),
+            dataType:"json",
+            success:function (data) {
+                //alert(data.info)
+                window.parent.updateHead()
+            }
+        })
+        return false;
+    })
+</script>
+
+
+</body>
+</html>

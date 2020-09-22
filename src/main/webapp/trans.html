@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+ <form>
+     转入账户:<input type="text" name="otherCode"><br>
+     转账金额:<input type="text" name="money"><br>
+     <input type="submit" VALUE="转账">
+ </form>
+<script type="text/javascript" src="js/jquery-1.12.2.min.js"></script>
+<script>
+    $("form").submit(function () {
+        $.ajax({
+            type:"post",
+            url:"trade/transfer.do",
+            data:$("form").serialize(),
+            success:function (data) {
+                alert(data.info)
+            }
+        })
+        return false;
+    })
+</script>
+</body>
+</html>

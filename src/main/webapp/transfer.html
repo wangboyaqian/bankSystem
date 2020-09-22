@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>Layui</title>
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <link rel="stylesheet" href="layui/css/layui.css"  media="all">
+    <!-- 注意：如果你直接复制所有代码到本地，上述css路径需要改成你本地的 -->
+</head>
+<body>
+<div id="content">
+    <div class="layui-form searchDiv">
+        <div class="layui-form-item">
+            <div class="layui-inline">
+                <label class="layui-form-label">开始时间</label>
+                <div class="layui-input-inline">
+                    <input type="text" class="layui-input" id="test1" placeholder="yyyy-MM-dd">
+                </div>
+            </div>
+            <div class="layui-inline">
+                <label class="layui-form-label">结束时间</label>
+                <div class="layui-input-inline">
+                    <input type="text" class="layui-input" id="test2" placeholder="yyyy-MM-dd">
+                </div>
+            </div>
+            <button class="layui-btn" data-type="reload">搜索</button>
+        </div>
+
+    </div>
+
+    <table class="layui-hide" id="test" lay-filter="demo"></table>
+</div>
+<!-- 表格 -->
+
+
+
+
+<script src="layui/layui.js" charset="utf-8"></script>
+<script src="js/jquery-1.12.2.min.js" type="text/javascript"></script>
+<!-- 注意：如果你直接复制所有代码到本地，上述js路径需要改成你本地的 -->
+
+<script>
+    layui.use(['table', "laypage", "layer", "laydate", "element"], function(){
+        //初始化table组件
+        var table = layui.table
+            ,laypage = layui.laypage
+            ,laydate = layui.laydate
+            ,layer = layui.layer,
+            element = layui.element;
+        //常规用法
+        laydate.render({
+            elem: '#test1'
+        });
+        //常规用法
+        laydate.render({
+            elem: '#test2'
+        });
+
+        //render 渲染
+        table.render({
+            elem: '#test'
+            ,url:'trade/list.do'
+            ,id:"transferTable"
+            ,page: true
+            ,cellMinWidth: 80 //全局定义常规单元格的最小宽度，layui 2.2.1 新增
+            ,cols: [[
+                {field:'createTime', width:200, title: '交易时间', sort: true, fixed:"left"}
+                ,{field:'income', width:100, title: '支出'}
+                ,{field:'pay', width:100, title: '收入'}
+                ,{field:'consumType', width:150, title: '转账类型', sort: true}
+                ,{field:'balance', width:100, title: '余额', sort: true}
+                ,{field:'comment', width:100, title: '备注', sort: true}
+            ]]
+        });
+
+
+        var active = {
+            reload: function(){
+                //执行重载
+                table.reload('transferTable', {
+                    page: {
+                        curr: 1 //重新从第 1 页开始
+                    }
+                    ,where: {
+                        beginTime:$("#test1").val(),
+                        endTime:$("#test2").val(),
+                    }
+                });
+            }
+        };
+
+        //layui百度搜数据表格的重载
+        $('.searchDiv .layui-btn').on('click', function(){
+            var type = $(this).data('type');
+            active[type] ? active[type].call(this) : '';
+        });
+
+    });
+</script>
+
+</body>
+</html>
